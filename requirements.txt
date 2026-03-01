@@ -1,4 +1,4 @@
 requests
 google-genai
-pymongo
+pymongo[srv]
 streamlit
