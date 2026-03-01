@@ -1,4 +1,5 @@
 requests
 google-genai
 pymongo[srv]
+dnspython
 streamlit
