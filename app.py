@@ -6,7 +6,7 @@ from datetime import datetime
 try:
     if "MONGO_URI" in st.secrets:
         MONGO_URL = st.secrets["MONGO_URI"]
-        # Use a stable connection method
+        # Stable connection for cloud servers
         client = MongoClient(MONGO_URL, tlsAllowInvalidCertificates=True)
         db = client['news_aggregator']
         collection = db['articles']
@@ -23,7 +23,7 @@ st.title("🌐 AI-Powered Industry News")
 
 # --- 3. SIDEBAR ---
 st.sidebar.title("Filters")
-# This is the section where the error was happening
+# Fixed industry list (no missing quotes)
 industries = ["All", "Tech", "Finance", "Healthcare", "Energy", "Sports", "Politics"]
 selected_industry = st.sidebar.selectbox("Select Category", industries)
 
@@ -31,10 +31,11 @@ selected_industry = st.sidebar.selectbox("Select Category", industries)
 query = {} if selected_industry == "All" else {"industry": selected_industry}
 
 try:
+    # Get latest 50 news items
     news_items = list(collection.find(query).sort("captured_at", -1).limit(50))
     
     if not news_items:
-        st.warning("No articles found yet. Run your GitHub Action to fetch data!")
+        st.warning("No articles found. Run your GitHub Action to fetch data!")
     else:
         for item in news_items:
             with st.container():
